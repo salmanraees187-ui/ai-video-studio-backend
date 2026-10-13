@@ -303,33 +303,45 @@ footer{
 
 <script>
 
-function generateVideo(){
-
+async function generateVideo() {
   const prompt = document.getElementById("prompt").value.trim();
   const result = document.getElementById("result");
   const status = document.getElementById("status");
   const substatus = document.getElementById("substatus");
 
-  if(prompt === ""){
+  if (!prompt) {
     alert("Please write a video prompt first!");
     return;
   }
 
   result.style.display = "block";
-
   status.innerText = "Creating your video...";
-  substatus.innerText = "AI is preparing your scene";
+  substatus.innerText = "Connecting to AI video generator...";
 
-  setTimeout(function(){
-    status.innerText = "✨ Video concept created!";
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: prompt,
+        aspect_ratio: document.getElementById("ratio").value
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || data.message || "Video request failed");
+    }
+
+    status.innerText = "Video generation started!";
     substatus.innerText =
-      "Style: " +
-      document.getElementById("style").value +
-      " • " +
-      document.getElementById("ratio").value;
+      "Generation ID: " + (data.id || data.generation_id || "Created");
 
-  },3000);
-
+  } catch (error) {
+    status.innerText = "Generation failed";
+    substatus.innerText = error.message;
+  }
 }
 
 </script>
