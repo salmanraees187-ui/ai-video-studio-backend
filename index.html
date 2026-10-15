@@ -331,7 +331,7 @@ async function generateVideo() {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || data.message || "Video request failed");
+      throw new Error(JSON.stringify(data.error || data.message || data || "Video request failed"));
     }
 
     status.innerText = "Video generation started!";
