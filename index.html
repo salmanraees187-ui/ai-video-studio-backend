@@ -345,6 +345,163 @@ async function generateVideo() {
 }
 
 </script>
+<style>
+.free-tools {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+.free-tools h2 {
+  text-align: center;
+  font-size: 28px;
+}
+.free-tool-card {
+  background: #17172b;
+  border: 1px solid #45456b;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+}
+.free-tool-card h3 {
+  color: #b9a4ff;
+}
+.free-tool-card input,
+.free-tool-card select,
+.free-tool-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #777;
+  background: #fff;
+  color: #111;
+}
+.free-tool-card button {
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #8b5cf6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+.free-tool-card textarea {
+  min-height: 100px;
+}
+</style>
 
+<section class="free-tools">
+  <h2>🎁 Free AI Creator Tools</h2>
+  <p style="text-align:center">Create prompts, horror stories and captions for free!</p>
+
+  <div class="free-tool-card">
+    <h3>🎬 AI Video Prompt Generator</h3>
+    <input id="freePromptTopic" placeholder="Enter video idea, e.g. baby dragon">
+    <select id="freePromptStyle">
+      <option value="cinematic realistic">Cinematic Realistic</option>
+      <option value="horror and suspense">Horror</option>
+      <option value="cute 3D animation">Cute 3D Animation</option>
+      <option value="fantasy adventure">Fantasy Adventure</option>
+      <option value="viral social media style">Viral Social Media</option>
+    </select>
+    <button onclick="makeFreePrompt()">Generate Prompt</button>
+    <textarea id="freePromptResult" placeholder="Your prompt will appear here"></textarea>
+    <button onclick="copyFreeText('freePromptResult')">Copy Prompt</button>
+  </div>
+
+  <div class="free-tool-card">
+    <h3>👻 Horror Story Generator</h3>
+    <input id="freeHorrorTopic" placeholder="Enter topic, e.g. haunted school">
+    <button onclick="makeFreeHorror()">Generate Horror Story</button>
+    <textarea id="freeHorrorResult" placeholder="Your horror story will appear here"></textarea>
+    <button onclick="copyFreeText('freeHorrorResult')">Copy Story</button>
+  </div>
+
+  <div class="free-tool-card">
+    <h3>📱 Caption & Hashtag Generator</h3>
+    <input id="freeCaptionTopic" placeholder="Enter video topic">
+    <select id="freeCaptionPlatform">
+      <option value="TikTok">TikTok</option>
+      <option value="Instagram Reels">Instagram Reels</option>
+      <option value="YouTube Shorts">YouTube Shorts</option>
+    </select>
+    <button onclick="makeFreeCaption()">Generate Caption</button>
+    <textarea id="freeCaptionResult" placeholder="Your caption and hashtags will appear here"></textarea>
+    <button onclick="copyFreeText('freeCaptionResult')">Copy Caption</button>
+  </div>
+</section>
+
+<script>
+function makeFreePrompt() {
+  var topic = document.getElementById("freePromptTopic").value.trim();
+  var style = document.getElementById("freePromptStyle").value;
+  if (!topic) {
+    alert("Please enter a video idea first!");
+    return;
+  }
+  document.getElementById("freePromptResult").value =
+    "Create a " + style + " video about " + topic +
+    ". Use detailed visuals, smooth camera movement, dramatic lighting, realistic textures, engaging action, beautiful composition, high quality, vertical 9:16 format, no text or watermark.";
+}
+
+function makeFreeHorror() {
+  var topic = document.getElementById("freeHorrorTopic").value.trim();
+  if (!topic) {
+    alert("Please enter a horror story topic first!");
+    return;
+  }
+  var stories = [
+    "At midnight, the lights went out in " + topic +
+    ". A voice whispered from the darkness, even though nobody else was there. The door slowly opened by itself. On the wall, a fresh message appeared: 'I know you are here.' Then the phone rang from inside the locked room.",
+
+    "Everyone warned me to stay away from " + topic +
+    ". One rainy night, I heard footsteps following me. I turned around, but the hallway was empty. My phone camera showed someone standing directly behind me. When I looked again, the figure was gone.",
+
+    "I visited " + topic +
+    " after dark to record a video. Everything looked empty until my camera detected a face in the window. I ran outside and checked the recording. The face was now looking straight into the camera, smiling. Then a knock came from inside my phone."
+  ];
+  document.getElementById("freeHorrorResult").value =
+    stories[Math.floor(Math.random() * stories.length)];
+}
+
+function makeFreeCaption() {
+  var topic = document.getElementById("freeCaptionTopic").value.trim();
+  var platform = document.getElementById("freeCaptionPlatform").value;
+  if (!topic) {
+    alert("Please enter a video topic first!");
+    return;
+  }
+  document.getElementById("freeCaptionResult").value =
+    "🔥 You won't believe this " + topic +
+    " video! Watch till the end 😱✨\n\nMade for " + platform +
+    "!\n\n#AI #AIVideo #" +
+    topic.replace(/[^a-zA-Z0-9]/g, "") +
+    " #Viral #Trending #Shorts #Reels #FYP";
+}
+
+function copyFreeText(id) {
+  var field = document.getElementById(id);
+  if (!field.value) {
+    alert("Generate some text first!");
+    return;
+  }
+  field.select();
+  field.setSelectionRange(0, 99999);
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(field.value).then(function() {
+      alert("Copied successfully!");
+    }).catch(function() {
+      document.execCommand("copy");
+      alert("Copy attempted!");
+    });
+  } else {
+    document.execCommand("copy");
+    alert("Copy attempted!");
+  }
+}
+</script>
 </body>
 </html>
