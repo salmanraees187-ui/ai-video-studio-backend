@@ -1,9 +1,9 @@
 export default async function handler(req, res) {
-  const apiKey = process.env.LUMA_API_KEY;
+  const apiKey = process.env.LUMA_AGENTS_API_KEY;
 
   if (!apiKey) {
     return res.status(500).json({
-      error: "LUMA_API_KEY is not configured in Vercel."
+      error: "LUMA_AGENTS_API_KEY is not configured in Vercel."
     });
   }
 
@@ -18,39 +18,38 @@ export default async function handler(req, res) {
       }
 
       const response = await fetch(
-        "https://api.lumalabs.ai/dream-machine/v1/generations/video",
+        "https://agents.lumalabs.ai/v1/generations",
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-            Accept: "application/json"
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
+            model: "ray-3.2",
+            type: "video",
             prompt: prompt.trim(),
-            model: "ray-2",
-            aspect_ratio: aspect_ratio || "16:9"
+            aspect_ratio: aspect_ratio || "16:9",
+            video: {
+              resolution: "720p",
+              duration: "5s"
+            }
           })
         }
       );
 
       const data = await response.json();
-      if (!response.ok) {
-  return res.status(response.status).json({
-    error: data
-  });
-      }
 
       if (!response.ok) {
         return res.status(response.status).json({
-          error: data.detail || "Video generation request failed."
+          error: data.detail || data.error || JSON.stringify(data)
         });
       }
 
       return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json({
-        error: "Server error while starting video generation."
+        error: error.message || "Video generation failed."
       });
     }
   }
@@ -66,7 +65,7 @@ export default async function handler(req, res) {
       }
 
       const response = await fetch(
-        `https://api.lumalabs.ai/dream-machine/v1/generations/${id}`,
+        `https://agents.lumalabs.ai/v1/generations/${id}`,
         {
           headers: {
             Authorization: `Bearer ${apiKey}`,
@@ -79,19 +78,18 @@ export default async function handler(req, res) {
 
       if (!response.ok) {
         return res.status(response.status).json({
-          error: data.detail || "Could not check video status."
+          error: data.detail || data.error || JSON.stringify(data)
         });
       }
 
       return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json({
-        error: "Server error while checking video status."
+        error: error.message || "Could not check video status."
       });
     }
   }
 
-  res.setHeader("Allow", ["GET", "POST"]);
   return res.status(405).json({
     error: "Method not allowed."
   });
