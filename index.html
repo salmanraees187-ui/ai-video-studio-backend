@@ -503,5 +503,12 @@ function copyFreeText(id) {
   }
 }
 </script>
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("/pwabuilder-sw.js");
+  });
+}
+</script>
 </body>
 </html>
