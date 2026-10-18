@@ -8,6 +8,14 @@
   "display": "standalone",
   "background_color": "#080812",
   "theme_color": "#080812",
+ "screenshots": [
+  {
+    "src": "/screenshot.png",
+    "sizes": "1080x1920",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+],
   "icons": [
     {
       "src": "/icon-192.png",
